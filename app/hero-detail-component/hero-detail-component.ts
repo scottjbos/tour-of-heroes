@@ -19,7 +19,7 @@ export class HeroDetailComponent implements OnActivate {
       currTree?: RouteTree, prevTree?: RouteTree) {
       let id = parseInt(current.getParam('id'));
       this.heroesService.getHero(id)
-        .then(hero => this.hero = hero);
+        .subscribe(hero => this.hero = hero);
     }
     
     goBack() {

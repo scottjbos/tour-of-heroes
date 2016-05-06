@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Hero } from './../models/hero';
 import { HeroDetailComponent } from "./../hero-detail-component/hero-detail-component";
 import { HeroesService } from "./../heroes-service/heroes-service";
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'my-heroes',
@@ -16,14 +17,13 @@ export class HeroesComponent implements OnInit {
     private router: Router,
     private heroesService: HeroesService) {}
 
-  heroes: Hero[];
+  heroes: Observable<Array<Hero>>;
 
   selectedHero: Hero;
   onSelect(hero: Hero) { this.selectedHero = hero; }
 
   ngOnInit():any {
-    this.heroesService.getHeroes()
-      .then(heroes => this.heroes = heroes);
+    this.heroes = this.heroesService.getHeroes();
   }
   
   gotoDetail(hero: Hero) {
