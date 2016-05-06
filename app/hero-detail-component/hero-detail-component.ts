@@ -1,20 +1,28 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { RouteSegment, RouteTree, OnActivate } from '@angular/router';
 import { Hero } from '../models/Hero';
+import { HeroesService } from "../heroes-service/heroes-service";
 
 @Component({
   selector: 'my-hero-detail',
-  template: `
-      <div *ngIf="hero">
-          <h2>{{hero.name}} details!</h2>
-          <div><label>id: </label>{{hero.id}}</div>
-          <div>
-              <label>name: </label>
-              <input [(ngModel)]="hero.name" placeholder="name"/>
-          </div>
-      </div>
-  `
+  templateUrl: 'app/hero-detail-component/hero-detail-component.html',
+  styleUrls: ['app/hero-detail-component/hero-detail-component.css']
 })
-export class HeroDetailComponent {
-    @Input()
+export class HeroDetailComponent implements OnActivate {
     hero: Hero;
+    
+    constructor(
+        private heroesService: HeroesService) {
+    }
+    
+    routerOnActivate(current: RouteSegment, prev?: RouteSegment,
+      currTree?: RouteTree, prevTree?: RouteTree) {
+      let id = parseInt(current.getParam('id'));
+      this.heroesService.getHero(id)
+        .then(hero => this.hero = hero);
+    }
+    
+    goBack() {
+        window.history.back();
+    }
 }
